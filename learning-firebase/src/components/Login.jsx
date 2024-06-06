@@ -1,5 +1,8 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { auth } from "../firebase";
+import { toast } from "react-toastify";
+import { signInWithEmailAndPassword } from "firebase/auth";
 // import Register from "../components/Register";
 
 function Login() {
@@ -17,10 +20,21 @@ function Login() {
       [name]: value,
     }));
   }
+  async function handleSubmit(e) {
+    e.preventDefault();
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      toast.success("Login Successfully");
+      window.location.href = "/profile";
+    } catch (error) {
+      console.log(error);
+      toast.error("An Error occured");
+    }
+  }
 
   return (
     <div>
-      <form>
+      <form onSubmit={handleSubmit}>
         <input
           type="email"
           id="email"
